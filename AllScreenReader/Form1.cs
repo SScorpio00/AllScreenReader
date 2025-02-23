@@ -121,13 +121,22 @@ namespace AllScreenReader
 
         private void ComicSite_Click(object? sender, EventArgs e)
         {
-            ToolStripMenuItem? clickedSite = sender as ToolStripMenuItem;
+            ComicSiteToolStripMenuItem? clickedSite = sender as ComicSiteToolStripMenuItem;
 
             if (clickedSite != null && clickedSite.Tag is string url)
             {
                 if (this.chrome != null)
                 {
-                    this.chrome.LoadUrl(clickedSite.Tag.ToString());
+                    if (clickedSite.CustomSiteScale != null)
+                    {
+                        ResizeViewToScaling((double)clickedSite.CustomSiteScale);
+                    }
+                    else
+                    {
+                        ResizeViewToScaling(this.ScaleSize);
+                    }
+
+                        this.chrome.LoadUrl(clickedSite.Tag.ToString());
                 }
             }
         }
