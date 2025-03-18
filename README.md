@@ -1,5 +1,7 @@
 # All Screen Reader
 
+[Gallery showcasing Comixology](https://imgur.com/a/2T9nQPM)
+
 This program creates a window that spans all screens of a computer, and creates a Chromium web browser across them.
 
 My personal use case is that I bought an *inexpensive* dual screen laptop off AliExpress to use to read digital comics and simulate a book with two pages side by side on each screen. But I ran into issues. The Intel graphics driver sees one of the screens as the internal laptop monitor, and the other as and external monitor. Unfortunately while the Intel driver lets you combine mutiple monitors to be "seen" as a single screen. This only works on external display. So I can't combine both monitors and simply maximize a full screen web browser across both screens.
