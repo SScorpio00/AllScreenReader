@@ -26,15 +26,18 @@ jobs:
 
       - name: Check for dependency changes
         id: changes
+        shell: pwsh
         run: |
-          if git diff --quiet; then
-            echo "changed=false" >> $env:GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $env:GITHUB_OUTPUT
-          fi
-      
+          git diff --quiet
+          if ($LASTEXITCODE -eq 0) {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "changed=false"
+          } else {
+            Add-Content -Path $env:GITHUB_OUTPUT -Value "changed=true"
+          }
+
       - name: Commit dependency updates
         if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -48,28 +51,35 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Restore
+        shell: pwsh
         run: dotnet restore AllScreenReader.sln
 
       - name: Build
         if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
         run: dotnet build AllScreenReader.sln --configuration Release
 
       - name: Publish
         if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
         run: dotnet publish AllScreenReader/AllScreenReader.csproj -c Release -o publish
 
       - name: Zip artifacts
         if: steps.changes.outputs.changed == 'true'
-        run: powershell Compress-Archive -Path publish\* -DestinationPath AllScreenReader.zip
+        shell: pwsh
+        run: Compress-Archive -Path publish\* -DestinationPath AllScreenReader.zip
 
       - name: Generate version tag
         id: version
         if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
         run: |
-          echo "tag=v$(Get-Date -Format 'yyyy.MM.dd.HHmm')" >> $env:GITHUB_OUTPUT
+          $tag = "v" + (Get-Date -Format "yyyy.MM.dd.HHmm")
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "tag=$tag"
 
       - name: Create Tag
         if: steps.changes.outputs.changed == 'true'
+        shell: pwsh
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
