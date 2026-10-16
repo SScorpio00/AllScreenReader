@@ -21,6 +21,7 @@ jobs:
         uses: yanovian/update-dependencies-action@v1
         with:
           update-strategy: non-breaking
+          allowed-major-upgrades: CefSharp.Common.NETCore,CefSharp.WinForms.NETCore
           create-pull-request: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
